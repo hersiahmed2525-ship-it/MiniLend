@@ -1,0 +1,21 @@
+{
+  "name": "minilend",
+  "version": "1.0.0",
+  "description": "MiniLend helps users keep track of things they lend to friends — money, books, or other items. A category is created for each type, then a card is added for each loan showing who borrowed it, when, and whether it has been returned. Cards can be edited or deleted when the item comes back.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hersiahmed2525-ship-it/MiniLend.git"
+  },
+  "keywords": [],
+  "author": "Hersi Ahmed",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/hersiahmed2525-ship-it/MiniLend/issues"
+  },
+  "homepage": "https://github.com/hersiahmed2525-ship-it/MiniLend#readme"
+}

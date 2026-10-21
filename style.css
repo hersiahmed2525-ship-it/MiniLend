@@ -1,0 +1,25 @@
+body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+#categoryList .btn {
+    border-radius: 20px;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.15s ease;
+}
+
+.error-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #dc3545;
+    color: white;
+    padding: 12px;
+    text-align: center;
+    font-weight: 600;
+    z-index: 9999;
+}
