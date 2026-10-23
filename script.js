@@ -1,4 +1,5 @@
-const API_URL = "https://jsonplaceholder.typicode.com";
+// Point to your GitHub Pages URL where db.json is hosted
+const API_URL = "https://hersiahmed2525-ship-it.github.io/MiniLend";
 
 // 1. Get HTML elements
 const categoryList = document.getElementById("categoryList");
@@ -12,14 +13,12 @@ const errorMessage = document.getElementById("error-message");
 const modalForm = document.getElementById("modalForm");
 const modalTitle = document.getElementById("modalTitle");
 const modalFields = document.getElementById("modalFields");
+const submitBtn = document.querySelector('#modalForm button[type="submit"]');
 
 // 2. Store data
-let categories = [
-  { id: 1, name: "School" },
-  { id: 2, name: "Friends" },
-];
+let categories = [];
 let lendCards = [];
-let activeCategory = "School";
+let activeCategory = "";
 
 // 3. Create the Bootstrap modal
 const myModal = new bootstrap.Modal(document.getElementById("myModal"));
@@ -43,7 +42,33 @@ function getToday() {
   return `${year}-${month}-${day}`;
 }
 
-// 5. Render Category Buttons
+// 5. GET Request: Load Data from your live db.json
+async function loadData() {
+  try {
+    // Fetch the db.json file from your GitHub Pages site
+    const response = await fetch(`${API_URL}/db.json`);
+    if (!response.ok) throw new Error("Could not load data");
+
+    const data = await response.json();
+
+    // Populate the arrays from the JSON file
+    categories = data.categories;
+    lendCards = data.cards;
+
+    // Set default active category
+    if (categories.length > 0) {
+      activeCategory = categories[0].name;
+    }
+
+    renderCategories();
+    renderCards();
+  } catch (error) {
+    showError("Could not load database. Please try again.");
+    console.error(error);
+  }
+}
+
+// 6. Render Category Buttons
 function renderCategories() {
   categoryList.innerHTML = "";
 
@@ -90,7 +115,7 @@ function renderCategories() {
   addCardBtn.disabled = !activeCategory;
 }
 
-// 6. Render Lending Cards
+// 7. Render Lending Cards
 function renderCards() {
   cardList.innerHTML = "";
   activeCategoryTitle.textContent = activeCategory || "Select a category";
@@ -164,15 +189,14 @@ function renderCards() {
   }
 }
 
-// 7. DELETE Requests
+// 8. DELETE Requests (Simulated locally)
 async function deleteCard(id) {
   hideError();
   try {
-    const response = await fetch(`${API_URL}/posts/${id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) throw new Error("Could not delete card");
+    // Simulate the API request
+    await fetch(`${API_URL}/db.json`, { method: "DELETE" });
 
+    // Update local state
     lendCards = lendCards.filter(function (card) {
       return card.id !== id;
     });
@@ -185,11 +209,10 @@ async function deleteCard(id) {
 async function deleteCategory(id, name) {
   hideError();
   try {
-    const response = await fetch(`${API_URL}/posts/${id}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) throw new Error("Could not delete category");
+    // Simulate the API request
+    await fetch(`${API_URL}/db.json`, { method: "DELETE" });
 
+    // Update local state
     categories = categories.filter(function (cat) {
       return cat.id !== id;
     });
@@ -205,7 +228,7 @@ async function deleteCategory(id, name) {
   }
 }
 
-// 8. Modal: Add Category (Click)
+// 9. Modal: Add Category (Click)
 addCategoryBtn.addEventListener("click", function () {
   hideError();
   modalTitle.textContent = "Add Category";
@@ -216,7 +239,7 @@ addCategoryBtn.addEventListener("click", function () {
   myModal.show();
 });
 
-// 9. Modal: Add Card (Click)
+// 10. Modal: Add Card (Click)
 addCardBtn.addEventListener("click", function () {
   hideError();
   if (!activeCategory) {
@@ -241,19 +264,15 @@ addCardBtn.addEventListener("click", function () {
   myModal.show();
 });
 
-// 10. POST Request: Save Form (Submit)
+// 11. POST Request: Save Form (Submit)
 modalForm.addEventListener("submit", async function (event) {
   event.preventDefault();
   hideError();
 
-  // Disable button to prevent double-clicks
   submitBtn.disabled = true;
   submitBtn.textContent = "Saving...";
 
   try {
-    let url = "";
-    let newData = {};
-
     // Check if it's a CATEGORY form
     const categoryInput = document.getElementById("categoryName");
     if (categoryInput) {
@@ -274,6 +293,7 @@ modalForm.addEventListener("submit", async function (event) {
       const newCategory = { id: Date.now(), name: name };
       categories.push(newCategory);
       activeCategory = newCategory.name;
+
       renderCategories();
       renderCards();
       myModal.hide();
@@ -293,30 +313,20 @@ modalForm.addEventListener("submit", async function (event) {
         return;
       }
 
-      url = `${API_URL}/posts`;
-      newData = {
-        title: item,
-        body: borrower,
-        userId: 1,
-        date: date,
-      };
-
-      const response = await fetch(url, {
+      // Simulate API request to your live db.json
+      await fetch(`${API_URL}/db.json`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newData),
+        body: JSON.stringify({ title: item, body: borrower, date: date }),
       });
 
-      if (!response.ok) throw new Error("Could not save the data");
-
-      const savedData = await response.json();
-
+      // Add to local state so it shows in the UI immediately
       lendCards.push({
         id: Date.now(),
         category: activeCategory,
-        item: savedData.title,
-        borrower: savedData.body,
-        date: savedData.date,
+        item: item,
+        borrower: borrower,
+        date: date,
       });
 
       renderCards();
@@ -326,30 +336,16 @@ modalForm.addEventListener("submit", async function (event) {
   } catch (error) {
     showError("Could not save your data. Please try again.");
   } finally {
-    // Re-enable the button when done (success or fail)
     submitBtn.disabled = false;
     submitBtn.textContent = "Save";
   }
 });
 
-// 11. Change Event: Filter (Change)
+// 12. Change Event: Filter (Change)
 filterSelect.addEventListener("change", function () {
   hideError();
   renderCards();
 });
 
-// 12. Start App
-renderCategories();
-renderCards();
-
-// Force scroll to app dashboard
-const launchBtn = document.querySelector('a[href="#app-dashboard"]');
-if (launchBtn) {
-  launchBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-    const dashboard = document.getElementById("app-dashboard");
-    if (dashboard) {
-      dashboard.scrollIntoView(); // Forces the jump
-    }
-  });
-}
+// 13. Start App
+loadData();
