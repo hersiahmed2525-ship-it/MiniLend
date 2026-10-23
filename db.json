@@ -1,0 +1,29 @@
+{
+  "$schema": "./node_modules/json-server/schema.json",
+  "categories": [
+    {
+      "id": "1",
+      "name": "Family"
+    },
+    {
+      "id": "2",
+      "name": "Friends"
+    }
+  ],
+  "cards": [
+    {
+      "id": "1",
+      "category": "Family",
+      "item": "Power Drill",
+      "borrower": "Uncle Bob",
+      "date": "2026-10-15"
+    },
+    {
+      "id": "2",
+      "category": "Friends",
+      "item": "PlayStation 5",
+      "borrower": "John Doe",
+      "date": "2026-10-25"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+{
+    "liveeval.execution.allowedModules": [
+        "boostrap"
+    ]
+}
