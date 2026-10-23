@@ -246,11 +246,15 @@ modalForm.addEventListener("submit", async function (event) {
   event.preventDefault();
   hideError();
 
+  // Disable button to prevent double-clicks
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Saving...";
+
   try {
     let url = "";
     let newData = {};
 
-    // Check if it's a CATEGORY form by looking for the input field
+    // Check if it's a CATEGORY form
     const categoryInput = document.getElementById("categoryName");
     if (categoryInput) {
       const name = categoryInput.value.trim();
@@ -273,10 +277,11 @@ modalForm.addEventListener("submit", async function (event) {
       renderCategories();
       renderCards();
       myModal.hide();
+      modalForm.reset();
       return;
     }
 
-    // Check if it's a CARD form by looking for the input fields
+    // Check if it's a CARD form
     const itemInput = document.getElementById("itemName");
     if (itemInput) {
       const item = itemInput.value.trim();
@@ -307,10 +312,10 @@ modalForm.addEventListener("submit", async function (event) {
       const savedData = await response.json();
 
       lendCards.push({
-        id: Date.now(), // Unique ID to prevent duplicate bugs
+        id: Date.now(),
         category: activeCategory,
         item: savedData.title,
-        body: savedData.body,
+        borrower: savedData.body,
         date: savedData.date,
       });
 
@@ -320,6 +325,10 @@ modalForm.addEventListener("submit", async function (event) {
     }
   } catch (error) {
     showError("Could not save your data. Please try again.");
+  } finally {
+    // Re-enable the button when done (success or fail)
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Save";
   }
 });
 
