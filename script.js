@@ -341,3 +341,15 @@ filterSelect.addEventListener("change", function () {
 // 12. Start App
 renderCategories();
 renderCards();
+
+// Force scroll to app dashboard
+const launchBtn = document.querySelector('a[href="#app-dashboard"]');
+if (launchBtn) {
+  launchBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+    const dashboard = document.getElementById("app-dashboard");
+    if (dashboard) {
+      dashboard.scrollIntoView(); // Forces the jump
+    }
+  });
+}
