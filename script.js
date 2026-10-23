@@ -72,6 +72,7 @@ async function loadData() {
 function renderCategories() {
   categoryList.innerHTML = "";
 
+  emptyMessage.classList.add("d-none"); //
   categories.forEach(function (category) {
     const wrapper = document.createElement("div");
     wrapper.className =
@@ -118,6 +119,7 @@ function renderCategories() {
 // 7. Render Lending Cards
 function renderCards() {
   cardList.innerHTML = "";
+  emptyMessage.classList.add("d-none"); //
   activeCategoryTitle.textContent = activeCategory || "Select a category";
   const today = getToday();
 
