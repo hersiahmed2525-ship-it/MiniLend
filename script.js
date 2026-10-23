@@ -1,4 +1,3 @@
-// Point to your GitHub Pages URL where db.json is hosted
 const API_URL = "https://hersiahmed2525-ship-it.github.io/MiniLend";
 
 // 1. Get HTML elements
